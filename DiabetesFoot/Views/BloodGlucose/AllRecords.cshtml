@@ -1,0 +1,29 @@
+﻿@model IEnumerable<DiabetesFoot.Models.BloodGlucoseRecord>
+
+@{
+    ViewBag.Title = "全部血糖记录 - " + ViewBag.PatientName;
+}
+
+<h2>@ViewBag.PatientName 的全部血糖记录</h2>
+
+<table class="table">
+    <tr>
+        <th>血糖值</th>
+        <th>时间</th>
+        <th>类型</th>
+        <th>状态</th>
+        <th>备注</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr class="@(item.IsCritical ? "danger" : "")">
+            <td>@item.GlucoseValue</td>
+            <td>@item.RecordTime.ToString("yyyy/MM/dd HH:mm")</td>
+            <td>@item.MeasureType</td>
+            <td>@(item.IsCritical ? "异常" : "正常")</td>
+            <td>@item.Notes</td>
+        </tr>
+    }
+</table>
+
+@Html.ActionLink("返回", "Record", new { id = ViewBag.PatientId }, new { @class = "btn btn-default" })

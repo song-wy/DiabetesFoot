@@ -1,0 +1,104 @@
+﻿@model IEnumerable<DiabetesFoot.Models.BloodGlucoseRecord>
+
+@{
+    ViewBag.Title = "血糖记录 - " + ViewBag.PatientName;
+}
+
+<h2>@ViewBag.PatientName 的血糖记录</h2>
+
+@if (TempData["AlertMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["AlertMessage"]
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <h4>添加新记录</h4>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.Hidden("PatientId", (int)ViewBag.PatientId)
+
+            <div class="form-group">
+                <label class="control-label">血糖值(mmol/L)</label>
+                <input type="number" step="0.1" name="GlucoseValue" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">测量时间</label>
+                <input type="datetime-local" name="RecordTime" class="form-control"
+                       value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">测量类型</label>
+                <select name="MeasureType" class="form-control">
+                    <option value="空腹">空腹</option>
+                    <option value="餐后">餐后</option>
+                    <option value="随机">随机</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">备注</label>
+                <textarea name="Notes" class="form-control" rows="2"></textarea>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="保存记录" class="btn btn-primary" />
+            </div>
+        }
+    </div>
+
+    <div class="col-md-4">
+        <h4>最近记录</h4>
+        <table class="table">
+            <tr>
+                <th>血糖值</th>
+                <th>时间</th>
+                <th>类型</th>
+                <th>状态</th>
+                <th>备注</th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr class="@(item.IsCritical ? "danger" : "")">
+                    <td class="@(item.IsCritical ? "danger-cell" : "")">@item.GlucoseValue</td>
+                    <td>@item.RecordTime.ToString("g")</td>
+                    <td>@item.MeasureType</td>
+                    <td>
+                        @if (item.IsCritical)
+                        {
+                            <span class="text-danger">异常</span>
+                        }
+                        else
+                        {
+                            <span class="text-success">正常</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+        @Html.ActionLink("查看全部记录", "AllRecords", new { id = ViewBag.PatientId }, new { @class = "btn btn-default" })
+    </div>
+
+    <!-- 添加时间筛选表单 -->
+    @using (Html.BeginForm("Record", "BloodGlucose", new { id = ViewBag.PatientId }, FormMethod.Get))
+    {
+        <div class="form-inline">
+            <label>从:</label>
+            @Html.TextBox("startDate", null, new { @class = "form-control", type = "date" })
+
+            <label>到:</label>
+            @Html.TextBox("endDate", null, new { @class = "form-control", type = "date" })
+
+            <input type="submit" value="筛选" class="btn btn-primary" />
+        </div>
+    }
+</div>
+
+<div>
+    @Html.ActionLink("返回患者列表", "Index", "Patient")
+</div>

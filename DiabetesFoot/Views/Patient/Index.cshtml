@@ -1,0 +1,38 @@
+﻿@model IEnumerable<DiabetesFoot.Models.Patient>
+
+@{
+    ViewBag.Title = "患者管理";
+}
+
+<h2>患者列表</h2>
+
+<p>
+    @Html.ActionLink("添加新患者", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>姓名</th>
+        <th>性别</th>
+        <th>手机号</th>
+        <th>糖尿病类型</th>
+        <th>Wagner分级</th>
+        <th>操作</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Name)</td>
+            <td>@Html.DisplayFor(modelItem => item.Gender)</td>
+            <td>@Html.DisplayFor(modelItem => item.Phone)</td>
+            <td>@(item.DiabetesType == 1 ? "1型" : "2型")</td>
+            <td>@Html.DisplayFor(modelItem => item.WagnerGrade)</td>
+            <td>
+                @Html.ActionLink("详情", "Details", new { id = item.PatientId }) |
+                @Html.ActionLink("血糖记录", "Record", "BloodGlucose", new { id = item.PatientId }, null) |
+                @Html.ActionLink("编辑", "Edit", new { id = item.PatientId }) |
+                @Html.ActionLink("删除", "Delete", new { id = item.PatientId })
+            </td>
+        </tr>
+    }
+</table>
