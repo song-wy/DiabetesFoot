@@ -63,6 +63,7 @@ namespace DiabetesFoot
             //    ClientId = "",
             //    ClientSecret = ""
             //});
+
         }
     }
 }

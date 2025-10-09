@@ -46,7 +46,7 @@ namespace DiabetesFoot.Models
 
         // 导航属性
         public virtual ICollection<BloodGlucoseRecord> BloodGlucoseRecords { get; set; }
-        //public virtual ICollection<WoundRecord> WoundRecords { get; set; }
+        public virtual ICollection<WoundRecord> WoundRecords { get; set; }
         //public virtual ICollection<Medication> Medications { get; set; }
         //public virtual ICollection<DoctorPatientRelation> Doctors { get; set; }
     }

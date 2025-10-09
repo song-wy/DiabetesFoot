@@ -172,13 +172,19 @@
     <Compile Include="Controllers\BloodGlucoseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\MedicationController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
+    <Compile Include="Controllers\WoundRecordController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\202507061755088_InitialCreate.cs" />
     <Compile Include="Migrations\202507061755088_InitialCreate.Designer.cs">
       <DependentUpon>202507061755088_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202507070318175_AddKeyToWoundRecord.cs" />
+    <Compile Include="Migrations\202507070318175_AddKeyToWoundRecord.Designer.cs">
+      <DependentUpon>202507070318175_AddKeyToWoundRecord.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -187,7 +193,9 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Patient.cs" />
+    <Compile Include="Models\WoundRecordModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\MedicationReminderService.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -265,11 +273,14 @@
     <Content Include="Views\Patient\Create.cshtml" />
     <Content Include="Views\BloodGlucose\Record.cshtml" />
     <Content Include="Views\BloodGlucose\AllRecords.cshtml" />
-    <Content Include="Views\BloodGlucose\Create.cshtml" />
+    <Content Include="Views\WoundRecord\Create.cshtml" />
+    <Content Include="Views\WoundRecord\HealingProgress.cshtml" />
+    <Content Include="Views\WoundRecord\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\BloodGlucoseRecordViewModel\" />
+    <Folder Include="Views\Medication\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
@@ -301,6 +312,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202507061755088_InitialCreate.resx">
       <DependentUpon>202507061755088_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202507070318175_AddKeyToWoundRecord.resx">
+      <DependentUpon>202507070318175_AddKeyToWoundRecord.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

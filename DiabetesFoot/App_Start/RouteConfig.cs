@@ -18,6 +18,12 @@ namespace DiabetesFoot
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute(
+                name: "WoundRecords",
+                url: "Patient/{patientId}/WoundRecords",
+                defaults: new { controller = "WoundRecord", action = "Index" }
+            );
         }
     }
 }
