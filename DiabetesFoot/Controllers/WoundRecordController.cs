@@ -11,21 +11,43 @@ namespace DiabetesFoot.Controllers
 {
     public class WoundRecordController : Controller
     {
+        // 使用全局的 DiabetesFootDbContext（已在 Models/DiabetesFootDbContext.cs 中定义）
         private DiabetesFootDbContext db = new DiabetesFootDbContext();
-
-        public class DiabetesFootDbContext : DbContext
-        {
-            public DbSet<WoundRecord> WoundRecords { get; set; }
-        }
 
         // GET: 伤口记录列表
         public ActionResult Index(int patientId)
         {
+            // 获取患者信息
+            var patient = db.Patients.Find(patientId);
+            if (patient == null)
+            {
+                return HttpNotFound("患者不存在");
+            }
+
+            // 获取该患者的所有伤口记录
             var records = db.WoundRecords
                           .Where(w => w.PatientId == patientId)
                           .OrderByDescending(w => w.RecordDate)
                           .ToList();
+
+            // 准备愈合进度数据用于图表显示
+            var healingProgress = records
+                .OrderBy(r => r.RecordDate)
+                .Select(r => new {
+                    Date = r.RecordDate.ToString("yyyy-MM-dd"),
+                    Size = r.Size ?? 0
+                })
+                .ToList();
+
+            // 传递数据到视图
             ViewBag.PatientId = patientId;
+            ViewBag.PatientName = patient.Name;
+            ViewBag.HealingProgress = new
+            {
+                Labels = healingProgress.Select(h => h.Date).ToArray(),
+                Sizes = healingProgress.Select(h => h.Size).ToArray()
+            };
+
             return View(records);
         }
 
@@ -123,13 +145,29 @@ namespace DiabetesFoot.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    // 从数据库获取原有记录
+                    var existingRecord = db.WoundRecords.Find(record.WoundId);
+                    if (existingRecord == null)
+                    {
+                        return HttpNotFound("伤口记录不存在");
+                    }
+
                     // 处理照片更新
                     if (woundPhoto != null && woundPhoto.ContentLength > 0)
                     {
-                        // 删除旧照片
-                        if (!string.IsNullOrEmpty(record.PhotoPath))
+                        // 验证照片大小（限制5MB）
+                        if (woundPhoto.ContentLength > 5 * 1024 * 1024)
                         {
-                            string oldPath = Server.MapPath(record.PhotoPath);
+                            ModelState.AddModelError("woundPhoto", "照片大小不能超过5MB");
+                            ViewBag.WoundTypes = GetWoundTypes();
+                            ViewBag.SeverityLevels = GetSeverityLevels();
+                            return View(record);
+                        }
+
+                        // 删除旧照片
+                        if (!string.IsNullOrEmpty(existingRecord.PhotoPath))
+                        {
+                            string oldPath = Server.MapPath(existingRecord.PhotoPath);
                             if (System.IO.File.Exists(oldPath))
                             {
                                 System.IO.File.Delete(oldPath);
@@ -141,13 +179,21 @@ namespace DiabetesFoot.Controllers
                         string path = Path.Combine(Server.MapPath("~/Uploads/WoundPhotos"), fileName);
                         Directory.CreateDirectory(Path.GetDirectoryName(path));
                         woundPhoto.SaveAs(path);
-                        record.PhotoPath = "/Uploads/WoundPhotos/" + fileName;
+                        existingRecord.PhotoPath = "/Uploads/WoundPhotos/" + fileName;
                     }
 
-                    db.Entry(record).State = EntityState.Modified;
+                    // 更新其他字段
+                    existingRecord.RecordDate = record.RecordDate;
+                    existingRecord.Position = record.Position;
+                    existingRecord.Size = record.Size;
+                    existingRecord.Description = record.Description;
+                    existingRecord.HealingStatus = record.HealingStatus;
+
+                    // 保存更改
+                    db.Entry(existingRecord).State = EntityState.Modified;
                     db.SaveChanges();
                     TempData["SuccessMessage"] = "伤口记录更新成功!";
-                    return RedirectToAction("Index", new { patientId = record.PatientId });
+                    return RedirectToAction("Index", new { patientId = existingRecord.PatientId });
                 }
             }
             catch (Exception ex)
@@ -155,6 +201,7 @@ namespace DiabetesFoot.Controllers
                 ModelState.AddModelError("", "更新失败: " + ex.Message);
             }
 
+            // 如果模型验证失败，返回视图并保留输入数据
             ViewBag.WoundTypes = GetWoundTypes();
             ViewBag.SeverityLevels = GetSeverityLevels();
             return View(record);

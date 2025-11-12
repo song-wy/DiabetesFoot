@@ -1,0 +1,104 @@
+@model IEnumerable<DiabetesFoot.Models.Medication>
+
+@{
+    ViewBag.Title = "药物管理";
+}
+
+<h2>药物管理</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade in" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (ViewBag.PatientId != null)
+{
+    <p>
+        @Html.ActionLink("添加新药物", "Create", new { patientId = ViewBag.PatientId }, new { @class = "btn btn-primary" })
+        @Html.ActionLink("查看提醒", "Reminder", new { patientId = ViewBag.PatientId }, new { @class = "btn btn-info" })
+        @Html.ActionLink("返回患者列表", "Index", "Patient", null, new { @class = "btn btn-default" })
+    </p>
+    <h3>患者：@ViewBag.PatientName</h3>
+}
+else
+{
+    <p>
+        @Html.ActionLink("查看所有提醒", "Reminder", null, new { @class = "btn btn-info" })
+        @Html.ActionLink("返回患者列表", "Index", "Patient", null, new { @class = "btn btn-default" })
+    </p>
+}
+
+<!-- 药物记录表格 -->
+<table class="table table-striped">
+    <tr>
+        <th>药物名称</th>
+        <th>剂量</th>
+        <th>频率</th>
+        <th>开始日期</th>
+        <th>结束日期</th>
+        <th>提醒时间</th>
+        <th>提醒状态</th>
+        <th>操作</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.MedicationName)</td>
+            <td>@Html.DisplayFor(modelItem => item.Dosage)</td>
+            <td>@Html.DisplayFor(modelItem => item.Frequency)</td>
+            <td>@item.StartDate.ToString("yyyy-MM-dd")</td>
+            <td>
+                @if (item.EndDate.HasValue)
+                {
+                    @item.EndDate.Value.ToString("yyyy-MM-dd")
+                }
+                else
+                {
+                    <span class="text-muted">持续用药</span>
+                }
+            </td>
+            <td>
+                @if (!string.IsNullOrEmpty(item.ReminderTime))
+                {
+                    @item.ReminderTime
+                }
+                else
+                {
+                    <span class="text-muted">未设置</span>
+                }
+            </td>
+            <td>
+                @if (item.IsReminderEnabled)
+                {
+                    <span class="label label-success">已启用</span>
+                }
+                else
+                {
+                    <span class="label label-default">已禁用</span>
+                }
+            </td>
+            <td>
+                @Html.ActionLink("详情", "Details", new { id = item.MedicationId }, new { @class = "btn btn-sm btn-info" }) |
+                @Html.ActionLink("编辑", "Edit", new { id = item.MedicationId }, new { @class = "btn btn-sm btn-primary" }) |
+                @Html.ActionLink("删除", "Delete", new { id = item.MedicationId }, new { @class = "btn btn-sm btn-danger" })
+            </td>
+        </tr>
+    }
+</table>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        <p>暂无药物记录。</p>
+        @if (ViewBag.PatientId != null)
+        {
+            <p>@Html.ActionLink("添加新药物", "Create", new { patientId = ViewBag.PatientId }, new { @class = "btn btn-primary" })</p>
+        }
+    </div>
+}
+

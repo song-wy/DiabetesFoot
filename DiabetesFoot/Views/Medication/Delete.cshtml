@@ -1,0 +1,95 @@
+@model DiabetesFoot.Models.Medication
+
+@{
+    ViewBag.Title = "删除药物";
+}
+
+<h2>删除药物记录</h2>
+
+<h3>确定要删除这条药物记录吗？</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <!-- 药物名称 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.MedicationName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MedicationName)
+        </dd>
+
+        <!-- 药物剂量 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.Dosage)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Dosage)
+        </dd>
+
+        <!-- 用药频率 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.Frequency)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Frequency)
+        </dd>
+
+        <!-- 开始日期 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </dt>
+        <dd>
+            @Model.StartDate.ToString("yyyy-MM-dd")
+        </dd>
+
+        <!-- 结束日期 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </dt>
+        <dd>
+            @if (Model.EndDate.HasValue)
+            {
+                @Model.EndDate.Value.ToString("yyyy-MM-dd")
+            }
+            else
+            {
+                <span class="text-muted">持续用药</span>
+            }
+        </dd>
+
+        <!-- 提醒时间 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.ReminderTime)
+        </dt>
+        <dd>
+            @if (!string.IsNullOrEmpty(Model.ReminderTime))
+            {
+                @Model.ReminderTime
+            }
+            else
+            {
+                <span class="text-muted">未设置</span>
+            }
+        </dd>
+
+        <!-- 备注 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.Notes)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Notes)
+        </dd>
+    </dl>
+
+    <!-- 删除确认表单 -->
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="确认删除" class="btn btn-danger" />
+            @Html.ActionLink("取消", "Index", new { patientId = Model.PatientId }, new { @class = "btn btn-default" })
+        </div>
+    }
+</div>
+

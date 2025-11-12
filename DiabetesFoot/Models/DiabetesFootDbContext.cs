@@ -16,8 +16,8 @@ namespace DiabetesFoot.Models
         public DbSet<Patient> Patients { get; set; }
         //public DbSet<Doctor> Doctors { get; set; }
         public DbSet<BloodGlucoseRecord> BloodGlucoseRecords { get; set; }
-        //public DbSet<WoundRecord> WoundRecords { get; set; }
-        //public DbSet<Medication> Medications { get; set; }
+        public DbSet<WoundRecord> WoundRecords { get; set; } // 伤口记录表
+        public DbSet<Medication> Medications { get; set; } // 药物管理表
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

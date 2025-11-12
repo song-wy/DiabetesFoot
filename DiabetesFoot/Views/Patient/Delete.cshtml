@@ -1,0 +1,92 @@
+@model DiabetesFoot.Models.Patient
+
+@{
+    ViewBag.Title = "删除患者";
+}
+
+<h2>删除患者</h2>
+
+<h3>确定要删除这名患者吗？</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <!-- 患者姓名 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <!-- 性别 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.Gender)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Gender)
+        </dd>
+
+        <!-- 手机号 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.Phone)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Phone)
+        </dd>
+
+        <!-- 糖尿病类型 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.DiabetesType)
+        </dt>
+        <dd>
+            @if (Model.DiabetesType.HasValue)
+            {
+                @(Model.DiabetesType == 1 ? "1型" : "2型")
+            }
+            else
+            {
+                <span class="text-muted">未填写</span>
+            }
+        </dd>
+
+        <!-- Wagner分级 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.WagnerGrade)
+        </dt>
+        <dd>
+            @if (Model.WagnerGrade.HasValue)
+            {
+                @Html.DisplayFor(model => model.WagnerGrade)
+            }
+            else
+            {
+                <span class="text-muted">未填写</span>
+            }
+        </dd>
+
+        <!-- 注册日期 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.RegisterDate)
+        </dt>
+        <dd>
+            @Model.RegisterDate.ToString("yyyy-MM-dd")
+        </dd>
+    </dl>
+
+    <!-- 警告信息 -->
+    <div class="alert alert-danger">
+        <strong>警告：</strong>删除患者将同时删除该患者的所有血糖记录、伤口记录（包括照片）和药物记录。此操作无法撤销！
+    </div>
+
+    <!-- 删除确认表单 -->
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="确认删除" class="btn btn-danger" />
+            @Html.ActionLink("取消", "Index", null, new { @class = "btn btn-default" })
+        </div>
+    }
+</div>
+

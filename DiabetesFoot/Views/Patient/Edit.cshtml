@@ -1,0 +1,122 @@
+@model DiabetesFoot.Models.Patient
+
+@{
+    ViewBag.Title = "编辑患者";
+}
+
+<h2>编辑患者信息</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        
+        <!-- 隐藏字段：PatientId 和 UserId -->
+        @Html.HiddenFor(model => model.PatientId)
+        @Html.HiddenFor(model => model.UserId)
+
+        <!-- 患者姓名 -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- 性别 -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Gender, new SelectList(new[] { "男", "女" }), "请选择", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- 出生日期 -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.BirthDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.BirthDate, new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                @Html.ValidationMessageFor(model => model.BirthDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- 手机号 -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- 紧急联系人 -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.EmergencyContact, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.EmergencyContact, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.EmergencyContact, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- 紧急联系电话 -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.EmergencyPhone, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.EmergencyPhone, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.EmergencyPhone, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- 糖尿病类型 -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.DiabetesType, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.DiabetesType, new SelectList(new[] {
+                    new { Value = (int?)1, Text = "1型" },
+                    new { Value = (int?)2, Text = "2型" }
+                }, "Value", "Text"), "请选择", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.DiabetesType, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- Wagner分级 -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.WagnerGrade, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.WagnerGrade, new { htmlAttributes = new { @class = "form-control", type = "number", min = "0", max = "5" } })
+                @Html.ValidationMessageFor(model => model.WagnerGrade, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- 注册日期（只读） -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.RegisterDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.RegisterDate, new { @class = "form-control" })
+                @Html.HiddenFor(model => model.RegisterDate)
+            </div>
+        </div>
+
+        <!-- 提交按钮 -->
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="保存修改" class="btn btn-primary" />
+                @Html.ActionLink("取消", "Index", null, new { @class = "btn btn-default" })
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("返回列表", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+

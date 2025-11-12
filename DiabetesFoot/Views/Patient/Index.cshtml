@@ -14,22 +14,19 @@
         <th>姓名</th>
         <th>性别</th>
         <th>手机号</th>
-        <th>糖尿病类型</th>
-        <th>Wagner分级</th>
         <th>操作</th>
     </tr>
-
     @foreach (var item in Model)
     {
         <tr>
             <td>@Html.DisplayFor(modelItem => item.Name)</td>
             <td>@Html.DisplayFor(modelItem => item.Gender)</td>
             <td>@Html.DisplayFor(modelItem => item.Phone)</td>
-            <td>@(item.DiabetesType == 1 ? "1型" : "2型")</td>
-            <td>@Html.DisplayFor(modelItem => item.WagnerGrade)</td>
             <td>
+                @Html.ActionLink("详情", "Details", new { id = item.PatientId }) |
                 @Html.ActionLink("血糖记录", "Record", "BloodGlucose", new { id = item.PatientId }, null) |
                 @Html.ActionLink("伤口护理", "Index", "WoundRecord", new { patientId = item.PatientId }, null) |
+                @Html.ActionLink("药物管理", "Index", "Medication", new { patientId = item.PatientId }, null) |
                 @Html.ActionLink("编辑", "Edit", new { id = item.PatientId }) |
                 @Html.ActionLink("删除", "Delete", new { id = item.PatientId })
             </td>

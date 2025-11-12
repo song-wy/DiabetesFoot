@@ -1,0 +1,120 @@
+@model DiabetesFoot.Models.Medication
+
+@{
+    ViewBag.Title = "药物详情";
+}
+
+<h2>药物详情</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <!-- 药物名称 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.MedicationName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MedicationName)
+        </dd>
+
+        <!-- 药物剂量 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.Dosage)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Dosage)
+        </dd>
+
+        <!-- 用药频率 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.Frequency)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Frequency)
+        </dd>
+
+        <!-- 开始日期 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </dt>
+        <dd>
+            @Model.StartDate.ToString("yyyy-MM-dd")
+        </dd>
+
+        <!-- 结束日期 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </dt>
+        <dd>
+            @if (Model.EndDate.HasValue)
+            {
+                @Model.EndDate.Value.ToString("yyyy-MM-dd")
+            }
+            else
+            {
+                <span class="text-muted">持续用药</span>
+            }
+        </dd>
+
+        <!-- 提醒时间 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.ReminderTime)
+        </dt>
+        <dd>
+            @if (!string.IsNullOrEmpty(Model.ReminderTime))
+            {
+                @Model.ReminderTime
+            }
+            else
+            {
+                <span class="text-muted">未设置</span>
+            }
+        </dd>
+
+        <!-- 提醒状态 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.IsReminderEnabled)
+        </dt>
+        <dd>
+            @if (Model.IsReminderEnabled)
+            {
+                <span class="label label-success">已启用</span>
+            }
+            else
+            {
+                <span class="label label-default">已禁用</span>
+            }
+        </dd>
+
+        <!-- 备注 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.Notes)
+        </dt>
+        <dd>
+            @if (!string.IsNullOrEmpty(Model.Notes))
+            {
+                @Html.DisplayFor(model => model.Notes)
+            }
+            else
+            {
+                <span class="text-muted">无备注</span>
+            }
+        </dd>
+
+        <!-- 创建时间 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.CreateDate)
+        </dt>
+        <dd>
+            @Model.CreateDate.ToString("yyyy-MM-dd HH:mm:ss")
+        </dd>
+    </dl>
+</div>
+
+<!-- 操作按钮 -->
+<p>
+    @Html.ActionLink("编辑", "Edit", new { id = Model.MedicationId }, new { @class = "btn btn-primary" }) |
+    @Html.ActionLink("删除", "Delete", new { id = Model.MedicationId }, new { @class = "btn btn-danger" }) |
+    @Html.ActionLink("返回列表", "Index", new { patientId = Model.PatientId }, new { @class = "btn btn-default" })
+</p>
+

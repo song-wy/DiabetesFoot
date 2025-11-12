@@ -1,0 +1,88 @@
+@model IEnumerable<DiabetesFoot.Models.Medication>
+
+@{
+    ViewBag.Title = "药物提醒";
+}
+
+<h2>药物提醒</h2>
+
+@if (ViewBag.PatientId != null)
+{
+    <p>
+        @Html.ActionLink("返回药物列表", "Index", new { patientId = ViewBag.PatientId }, new { @class = "btn btn-default" })
+    </p>
+}
+else
+{
+    <p>
+        @Html.ActionLink("返回药物列表", "Index", null, new { @class = "btn btn-default" })
+    </p>
+}
+
+<!-- 提醒列表 -->
+@if (Model.Any())
+{
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-6">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">@item.MedicationName</h3>
+                    </div>
+                    <div class="panel-body">
+                        <dl class="dl-horizontal">
+                            <dt>患者：</dt>
+                            <dd>@item.Patient.Name</dd>
+                            <dt>剂量：</dt>
+                            <dd>@item.Dosage</dd>
+                            <dt>频率：</dt>
+                            <dd>@item.Frequency</dd>
+                            <dt>提醒时间：</dt>
+                            <dd>
+                                @if (!string.IsNullOrEmpty(item.ReminderTime))
+                                {
+                                    <span class="label label-warning">@item.ReminderTime</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">未设置</span>
+                                }
+                            </dd>
+                            <dt>用药状态：</dt>
+                            <dd>
+                                @if (item.EndDate.HasValue && item.EndDate.Value < DateTime.Now)
+                                {
+                                    <span class="label label-default">已结束</span>
+                                }
+                                else if (item.StartDate > DateTime.Now)
+                                {
+                                    <span class="label label-info">未开始</span>
+                                }
+                                else
+                                {
+                                    <span class="label label-success">进行中</span>
+                                }
+                            </dd>
+                        </dl>
+                        @if (!string.IsNullOrEmpty(item.Notes))
+                        {
+                            <p><strong>备注：</strong>@item.Notes</p>
+                        }
+                        <p>
+                            @Html.ActionLink("详情", "Details", new { id = item.MedicationId }, new { @class = "btn btn-sm btn-info" }) |
+                            @Html.ActionLink("编辑", "Edit", new { id = item.MedicationId }, new { @class = "btn btn-sm btn-primary" })
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-info">
+        <p>暂无药物提醒。</p>
+    </div>
+}
+

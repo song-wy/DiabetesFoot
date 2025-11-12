@@ -1,0 +1,93 @@
+@model DiabetesFoot.Models.WoundRecord
+
+@{
+    ViewBag.Title = "伤口记录详情";
+}
+
+<h2>伤口记录详情</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <!-- 伤口ID -->
+        <dt>
+            @Html.DisplayNameFor(model => model.WoundId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.WoundId)
+        </dd>
+
+        <!-- 患者ID -->
+        <dt>
+            @Html.DisplayNameFor(model => model.PatientId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PatientId)
+        </dd>
+
+        <!-- 记录日期 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.RecordDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RecordDate)
+        </dd>
+
+        <!-- 伤口位置 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.Position)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Position)
+        </dd>
+
+        <!-- 伤口大小 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.Size)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Size) cm²
+        </dd>
+
+        <!-- 愈合状态 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.HealingStatus)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.HealingStatus)
+        </dd>
+
+        <!-- 伤口描述 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <!-- 照片 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.PhotoPath)
+        </dt>
+        <dd>
+            @if (!string.IsNullOrEmpty(Model.PhotoPath))
+            {
+                <img src="@Model.PhotoPath" alt="伤口照片" style="max-width: 500px; max-height: 500px;" class="img-thumbnail" />
+                <br />
+                <a href="@Model.PhotoPath" target="_blank">查看大图</a>
+            }
+            else
+            {
+                <span class="text-muted">暂无照片</span>
+            }
+        </dd>
+    </dl>
+</div>
+
+<!-- 操作按钮 -->
+<p>
+    @Html.ActionLink("编辑", "Edit", new { id = Model.WoundId }, new { @class = "btn btn-primary" }) |
+    @Html.ActionLink("删除", "Delete", new { id = Model.WoundId }, new { @class = "btn btn-danger" }) |
+    @Html.ActionLink("返回列表", "Index", new { patientId = Model.PatientId }, new { @class = "btn btn-default" })
+</p>
+

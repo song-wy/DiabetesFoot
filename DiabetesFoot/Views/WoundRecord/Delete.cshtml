@@ -1,0 +1,88 @@
+@model DiabetesFoot.Models.WoundRecord
+
+@{
+    ViewBag.Title = "删除伤口记录";
+}
+
+<h2>删除伤口记录</h2>
+
+<h3>确定要删除这条伤口记录吗？</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <!-- 伤口ID -->
+        <dt>
+            @Html.DisplayNameFor(model => model.WoundId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.WoundId)
+        </dd>
+
+        <!-- 记录日期 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.RecordDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RecordDate)
+        </dd>
+
+        <!-- 伤口位置 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.Position)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Position)
+        </dd>
+
+        <!-- 伤口大小 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.Size)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Size) cm²
+        </dd>
+
+        <!-- 愈合状态 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.HealingStatus)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.HealingStatus)
+        </dd>
+
+        <!-- 伤口描述 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <!-- 照片 -->
+        <dt>
+            @Html.DisplayNameFor(model => model.PhotoPath)
+        </dt>
+        <dd>
+            @if (!string.IsNullOrEmpty(Model.PhotoPath))
+            {
+                <img src="@Model.PhotoPath" alt="伤口照片" style="max-width: 300px; max-height: 300px;" class="img-thumbnail" />
+            }
+            else
+            {
+                <span class="text-muted">暂无照片</span>
+            }
+        </dd>
+    </dl>
+
+    <!-- 删除确认表单 -->
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="确认删除" class="btn btn-danger" />
+            @Html.ActionLink("取消", "Index", new { patientId = Model.PatientId }, new { @class = "btn btn-default" })
+        </div>
+    }
+</div>
+

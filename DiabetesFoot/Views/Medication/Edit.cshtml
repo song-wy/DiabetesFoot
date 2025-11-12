@@ -1,0 +1,111 @@
+@model DiabetesFoot.Models.Medication
+
+@{
+    ViewBag.Title = "编辑药物";
+}
+
+<h2>编辑药物记录</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        
+        <!-- 隐藏字段：MedicationId 和 PatientId -->
+        @Html.HiddenFor(model => model.MedicationId)
+        @Html.HiddenFor(model => model.PatientId)
+        @Html.HiddenFor(model => model.CreateDate)
+
+        <!-- 药物名称 -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.MedicationName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.MedicationName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MedicationName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- 药物剂量 -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.Dosage, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Dosage, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Dosage, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- 用药频率 -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.Frequency, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Frequency, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Frequency, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- 开始日期 -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- 结束日期 -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+                <span class="help-block">如果不填写，表示持续用药</span>
+            </div>
+        </div>
+
+        <!-- 提醒时间 -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.ReminderTime, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ReminderTime, new { htmlAttributes = new { @class = "form-control", type = "time" } })
+                @Html.ValidationMessageFor(model => model.ReminderTime, "", new { @class = "text-danger" })
+                <span class="help-block">格式：HH:mm（例如：08:00）</span>
+            </div>
+        </div>
+
+        <!-- 是否启用提醒 -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.IsReminderEnabled, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.IsReminderEnabled)
+                    @Html.ValidationMessageFor(model => model.IsReminderEnabled, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <!-- 备注 -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.Notes, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Notes, new { @class = "form-control", rows = 4 })
+                @Html.ValidationMessageFor(model => model.Notes, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- 提交按钮 -->
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="保存修改" class="btn btn-primary" />
+                @Html.ActionLink("取消", "Index", new { patientId = Model.PatientId }, new { @class = "btn btn-default" })
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
